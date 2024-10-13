@@ -1,0 +1,87 @@
+{% extends "_base.html" %}
+{% load static %}
+
+{% block title %}
+Signup | Django
+{% endblock %}
+
+{% block content %}
+<div class="flex justify-center items-center min-h-screen bg-green-50">
+    <div class="max-w-lg w-full bg-white p-8 rounded-lg shadow-lg transform transition-transform duration-300 hover:scale-105">
+        <h1 class="text-4xl font-bold text-center mb-8 text-green-800">Signup</h1>
+
+        {% if messages %}
+        <div class="mb-6">
+            {% for message in messages %}
+            <div class="bg-red-100 text-red-800 p-4 rounded-lg mb-2 transition-transform duration-300 transform hover:scale-105">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="POST" action="{% url 'addUser' %}" class="space-y-6">
+            {% csrf_token %}
+            <div class="grid grid-cols-1 gap-4">
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-medium mb-1">Username</label>
+                    <input
+                        class="w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 p-3 transition duration-300 hover:shadow-lg"
+                        type="text" name="username" placeholder="Username">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-medium mb-1">Firstname</label>
+                    <input
+                        class="w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 p-3 transition duration-300 hover:shadow-lg"
+                        type="text" name="firstname" placeholder="Firstname">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-medium mb-1">Lastname</label>
+                    <input
+                        class="w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 p-3 transition duration-300 hover:shadow-lg"
+                        type="text" name="lastname" placeholder="Lastname">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-medium mb-1">Email</label>
+                    <input
+                        class="w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 p-3 transition duration-300 hover:shadow-lg"
+                        type="email" name="email" placeholder="Email">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-medium mb-1">Password</label>
+                    <input
+                        class="w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 p-3 transition duration-300 hover:shadow-lg"
+                        type="password" name="password" placeholder="Password">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-medium mb-1">Re-password</label>
+                    <input
+                        class="w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 p-3 transition duration-300 hover:shadow-lg"
+                        type="password" name="repassword" placeholder="Re-password">
+                </div>
+            </div>
+
+            <div class="flex justify-between items-center mt-6">
+                <button type="submit"
+                    class="bg-gradient-to-r from-green-500 to-green-600 text-white px-6 py-3 rounded-full shadow-lg hover:from-green-600 hover:to-green-700 transition-transform transform hover:scale-105">Signup</button>
+                <a href="{% url 'login' %}"
+                    class="bg-gray-200 hover:bg-gray-300 text-black px-6 py-3 rounded-full shadow-md transition-colors">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+    // การเคลื่อนไหวสำหรับปุ่ม Signup
+    const button = document.querySelector('button[type="submit"]');
+    button.addEventListener('mouseover', () => {
+        button.classList.add('scale-105');
+    });
+
+    button.addEventListener('mouseleave', () => {
+        button.classList.remove('scale-105');
+    });
+</script>
+{% endblock %}
+{% endblock %}

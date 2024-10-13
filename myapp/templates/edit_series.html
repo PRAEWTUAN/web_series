@@ -1,0 +1,24 @@
+<!-- templates/edit_series.html -->
+<div class="container mx-auto p-6">
+    <h1 class="text-4xl font-bold mb-4 text-green-600">Edit Series: {{ form.instance.title }}</h1>
+
+    <form method="post" class="bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
+        {% csrf_token %}
+        <div class="space-y-4">
+            {{ form.as_p }}
+        </div>
+        
+        <button type="submit" class="mt-4 bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600 transition duration-300 transform hover:scale-105 active:scale-95 shadow-lg">Save Changes</button>
+    </form>
+
+    <div class="mt-6">
+        <a href="{% url 'series_detail' form.instance.id %}" class="inline-block bg-gray-400 text-white py-2 px-4 rounded hover:bg-gray-500 transition duration-300 transform hover:scale-105 active:scale-95 shadow-lg">Back to Series</a>
+    </div>
+</div>
+
+<style>
+    /* Custom styles for the edit series page */
+    body {
+        background-color: #f9fafb; /* Light background color */
+    }
+</style>

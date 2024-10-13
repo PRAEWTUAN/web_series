@@ -1,0 +1,35 @@
+<!-- templates/series_list.html -->
+{% extends "_base.html" %}
+{% load static %}
+
+{% block title %}All Series | Series{% endblock %}
+
+{% block content %}
+<h1 class="text-3xl font-bold mb-6 text-center text-green-600">All Series</h1>
+
+<ul class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    {% for s in series %}
+    <li class="bg-white p-4 rounded-lg shadow-md flex flex-col items-center transition-transform duration-300 hover:scale-105 hover:shadow-lg">
+        <a href="{% url 'series_detail' s.id %}">
+            <img src="{{ s.cover_image_url }}" alt="{{ s.title }}" class="h-48 w-48 object-cover rounded-lg mb-4 transition-transform duration-300 hover:scale-110">
+            <h2 class="text-lg font-semibold text-center text-gray-800">{{ s.title }}</h2>
+        </a>
+        <p class="text-sm text-gray-500 mb-2">{{ s.country }}</p>
+        
+        <div class="mt-4 flex space-x-2">
+            {% if user.is_staff %}  <!-- เช็คว่าผู้ใช้เป็น admin หรือไม่ -->
+                <a href="{% url 'edit_series' s.id %}" class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition transform hover:scale-105">Edit</a>
+                <form action="{% url 'delete_series' s.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition transform hover:scale-105">Delete</button>
+                </form>
+            {% endif %}
+        </div>
+    </li>
+    {% empty %}
+    <li class="text-center text-gray-500 col-span-full">ยังไม่มีซีรีส์ในรายการ</li>
+    {% endfor %}
+</ul>
+
+<a href="{% url 'add_series' %}" class="mt-6 inline-block bg-green-500 text-white px-4 py-2 rounded-lg shadow hover:bg-green-600 transition transform hover:scale-105">Add New Series</a>
+{% endblock %}

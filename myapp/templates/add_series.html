@@ -1,0 +1,83 @@
+{% extends "_base.html" %}
+{% load static %}
+
+{% block title %}เพิ่มซีรีส์ | Doo Series{% endblock %}
+
+{% block content %}
+<h1 class="text-4xl font-bold text-center my-6 text-green-600">เพิ่มซีรีส์ใหม่</h1>
+
+<form method="POST" class="max-w-md mx-auto bg-white p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
+    {% csrf_token %}
+    <div class="mb-4">
+        <label for="title" class="block text-gray-700 font-medium">ชื่อซีรีส์:</label>
+        <input type="text" name="title" id="title" class="border rounded w-full p-2 focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-200" required>
+    </div>
+    <div class="mb-4">
+        <label for="description" class="block text-gray-700 font-medium">คำอธิบาย:</label>
+        <textarea name="description" id="description" class="border rounded w-full p-2 focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-200" rows="4" required></textarea>
+    </div>
+    <div class="mb-4">
+        <label for="country" class="block text-gray-700 font-medium">ประเทศ:</label>
+        <select name="country" id="country" class="border rounded w-full p-2 focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-200">
+            <option value="kr">เกาหลี</option>
+            <option value="th">ไทย</option>
+            <option value="chn">จีน</option>
+        </select>
+    </div>
+    <div class="mb-4">
+        <label for="cover_image_url" class="block text-gray-700 font-medium">ภาพปก:</label>
+        <input type="url" name="cover_image_url" id="cover_image_url" class="border rounded w-full p-2 focus:outline-none focus:ring-2 focus:ring-green-400 transition duration-200" required>
+    </div>
+    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition duration-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl">เพิ่มซีรีส์</button>
+</form>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const inputs = document.querySelectorAll('input, textarea, select');
+        
+        inputs.forEach(input => {
+            input.addEventListener('focus', () => {
+                input.classList.add('ring-2', 'ring-green-400', 'shadow-lg', 'transition', 'duration-200');
+                input.classList.remove('border-gray-300');
+            });
+
+            input.addEventListener('blur', () => {
+                input.classList.remove('ring-2', 'ring-green-400', 'shadow-lg');
+                input.classList.add('border-gray-300');
+            });
+        });
+
+        // Add a subtle shake effect on submit if the form is empty
+        const form = document.querySelector('form');
+        form.addEventListener('submit', (e) => {
+            let isEmpty = false;
+            inputs.forEach(input => {
+                if (!input.value) {
+                    isEmpty = true;
+                }
+            });
+
+            if (isEmpty) {
+                e.preventDefault();
+                form.classList.add('animate-shake');
+                setTimeout(() => {
+                    form.classList.remove('animate-shake');
+                }, 500);
+            }
+        });
+    });
+</script>
+
+<style>
+    @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        25% { transform: translateX(-5px); }
+        50% { transform: translateX(5px); }
+        75% { transform: translateX(-5px); }
+    }
+    .animate-shake {
+        animation: shake 0.5s ease forwards;
+    }
+</style>
+
+{% endblock %}

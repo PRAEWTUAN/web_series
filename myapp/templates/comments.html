@@ -1,0 +1,40 @@
+{% extends "_base.html" %}
+{% load static %}
+
+{% block title %}ความคิดเห็นสำหรับ {{ series.title }}{% endblock %}
+
+{% block content %}
+    <div class="container mx-auto p-6">
+        <h1 class="text-4xl font-bold mb-6 text-gray-800">{{ series.title }}</h1>
+
+        <div class="mt-8">
+            <h2 class="text-2xl font-bold mb-4">เพิ่มความคิดเห็นของคุณ:</h2>
+            <form method="POST" class="space-y-6 bg-gray-50 p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow duration-300">
+                {% csrf_token %}
+                
+                <div class="border border-gray-300 p-4 rounded-lg shadow-sm bg-white">
+                    {{ comment_form.as_p }}
+                </div>
+
+                <h2 class="text-lg font-bold mb-2">ให้คะแนน:</h2>
+                <div class="border border-gray-300 p-4 rounded-lg shadow-sm bg-white">
+                    {{ rating_form.score }}
+                </div>
+
+                <button type="submit" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300 transform hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl">ส่งความคิดเห็น</button>
+            </form>
+        </div>
+
+        <div class="mt-6">
+            <a href="{% url 'series_detail' series.id %}" class="inline-block bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-300 transform hover:scale-105 active:scale-95 shadow-lg">กลับไปที่รายละเอียดซีรีส์</a>
+        </div>
+    </div>
+
+    <style>
+        /* Custom animation for form fields */
+        input:focus, textarea:focus, select:focus {
+            border-color: #3b82f6; /* Change border color on focus */
+            box-shadow: 0 0 5px rgba(59, 130, 246, 0.5); /* Add a shadow on focus */
+        }
+    </style>
+{% endblock %}

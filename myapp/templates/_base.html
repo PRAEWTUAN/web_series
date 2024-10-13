@@ -1,0 +1,172 @@
+{% load compress %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Doo Series{% endblock %}</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;600&family=Mitr:wght@300;400;600&family=Prompt:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <!-- Styles -->
+    {% compress css %}
+    <link rel="stylesheet" href="{% static 'src/output.css' %}">
+    {% endcompress %}
+    <style>
+        .header-transition {
+            transition: background-color 0.3s, box-shadow 0.3s;
+        }
+        .scrolled {
+            background-color: rgba(34, 197, 94, 0.9); /* Green with some transparency */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        /* Logo Hover Effect */
+        .logo {
+            transition: transform 0.3s ease;
+        }
+        .logo:hover {
+            transform: rotate(360deg);
+        }
+        /* Menu Link Hover Effect */
+        nav a {
+            position: relative;
+        }
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: white;
+            bottom: -5px;
+            left: 0;
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+        nav a:hover::after {
+            transform: scaleX(1);
+        }
+        /* Button Hover Effect */
+        .btn {
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .btn:hover {
+            background-color: rgba(255, 255, 255, 0.8);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+
+<body class="bg-green-50">
+    <header class="bg-green-500 py-4 shadow-lg header-transition" id="header">
+        <div class="container mx-auto flex items-center justify-between px-6">
+            <!-- Logo -->
+            <div class="flex items-center">
+                <img src="{% static 'image/doo series.png' %}" alt="Logo" class="h-10 w-10 mr-2 rounded-full border-2 border-white logo">
+                <h1 class="text-white text-3xl font-bold">
+                    Doo Series
+                </h1>
+            </div>
+
+            <!-- Menu -->
+            {% if user.is_authenticated %}
+            <nav class="flex items-center space-x-6">
+                <a href="{% url 'series_list' %}" class="text-white text-lg hover:text-gray-200 font-sarabun transition duration-300 ease-in-out">รายการซีรีส์ทั้งหมด</a>
+
+                <a href="{% url 'recommended_series' %}" class="text-white text-lg hover:text-gray-200 font-sarabun transition duration-300 ease-in-out">แนะนำ</a>
+
+                {% if user.is_staff %}
+                    <a href="{% url 'add_series' %}" class="text-white text-lg hover:text-gray-200 font-sarabun transition duration-300 ease-in-out">เพิ่มซีรีส์</a>
+                    <a href="{% url 'admin:index' %}" class="text-white text-lg hover:text-gray-200 font-sarabun transition duration-300 ease-in-out">แดชบอร์ดผู้ดูแลระบบ</a>
+                {% endif %}
+
+                <!-- Country Filter Links -->
+                <a href="{% url 'series_by_country' 'kr' %}" class="text-white text-lg hover:text-gray-200 font-sarabun transition duration-300 ease-in-out">เกาหลี</a>
+                <a href="{% url 'series_by_country' 'th' %}" class="text-white text-lg hover:text-gray-200 font-sarabun transition duration-300 ease-in-out">ไทย</a>
+                <a href="{% url 'series_by_country' 'chn' %}" class="text-white text-lg hover:text-gray-200 font-sarabun transition duration-300 ease-in-out">จีน</a>
+
+                <!-- WatchList -->
+                <a href="/watchlist/" class="text-white text-lg hover:text-gray-200 font-sarabun transition duration-300 ease-in-out">WatchList</a>
+            </nav>
+            {% endif %}
+
+            <!-- User Menu -->
+            <div class="flex items-center space-x-4">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'logout' %}" class="btn bg-white text-green-500 px-4 py-2 rounded-lg hover:bg-gray-200">ออกจากระบบ</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="btn bg-white text-green-500 px-4 py-2 rounded-lg hover:bg-gray-200">เข้าสู่ระบบ</a>
+                    <a href="{% url 'signup' %}" class="btn bg-white text-green-500 px-4 py-2 rounded-lg hover:bg-gray-200">สมัครสมาชิก</a>
+                    
+                    <!-- ลิงก์สำหรับลืมรหัสผ่าน -->
+                    <a href="/password_reset/" class="text-white hover:underline text-sm">ลืมรหัสผ่าน?</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    {% block content %}
+    {% endblock %}
+
+    <footer class="bg-green-800 text-white text-center py-4">
+        <p>&copy; 2024 Doo Series. All rights reserved.</p>
+    </footer>
+
+    <!-- Scroll-to-top button -->
+    <button id="scrollTopBtn" class="fixed bottom-4 right-4 bg-green-500 text-white p-3 rounded-full shadow-lg hidden hover:bg-green-600 transition duration-300 ease-in-out">
+        ⬆️
+    </button>
+
+    <!-- Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const scrollTopBtn = document.getElementById('scrollTopBtn');
+            const header = document.getElementById('header');
+
+            // Show the button when scrolling down 300px
+            window.onscroll = function () {
+                if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                    scrollTopBtn.classList.remove('hidden');
+                    scrollTopBtn.classList.add('animate-bounce');
+                } else {
+                    scrollTopBtn.classList.add('hidden');
+                    scrollTopBtn.classList.remove('animate-bounce');
+                }
+
+                // Change header style on scroll
+                if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            };
+
+            // Smooth scroll to top when the button is clicked
+            scrollTopBtn.addEventListener('click', function () {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+
+            // Menu hover effect
+            const menuLinks = document.querySelectorAll('nav a');
+            menuLinks.forEach(link => {
+                link.addEventListener('mouseover', () => {
+                    link.style.transform = 'scale(1.1)';
+                    link.style.transition = 'transform 0.3s ease-in-out';
+                });
+                link.addEventListener('mouseout', () => {
+                    link.style.transform = 'scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

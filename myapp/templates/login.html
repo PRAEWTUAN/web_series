@@ -1,0 +1,70 @@
+{% extends "_base.html" %}
+{% load static %}
+{% block title %}
+    Login | Doo Series
+{% endblock %}
+
+{% block content %}
+<div class="flex justify-center items-center min-h-screen bg-green-50">
+    <div class="max-w-md w-full bg-white p-8 rounded-lg shadow-lg transform transition-all duration-300 hover:shadow-2xl">
+        <h1 class="text-4xl font-bold text-center mb-8 text-green-600">เข้าสู่ระบบ</h1>
+
+        {% if messages %}
+            <div class="mb-6">
+                {% for message in messages %}
+                    <div class="message-box bg-red-100 text-red-800 p-4 rounded-lg mb-2 transform transition-all duration-500 opacity-0 slide-in">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <form method="post" action="{% url 'loginForm' %}" class="space-y-6">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-medium mb-1">ชื่อผู้ใช้</label>
+                <input class="w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 p-3 transition duration-300 hover:border-green-500" type="text" name="username" placeholder="ชื่อผู้ใช้" required>
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-700 text-sm font-medium mb-1">รหัสผ่าน</label>
+                <input class="w-full border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 p-3 transition duration-300 hover:border-green-500" type="password" name="password" placeholder="รหัสผ่าน" required>
+            </div>
+            <div class="flex justify-between items-center mb-6">
+                <button class="bg-gradient-to-r from-green-500 to-teal-500 text-white px-6 py-3 rounded-full shadow-lg hover:from-green-600 hover:to-teal-600 transition-transform transform hover:scale-105">
+                    เข้าสู่ระบบ
+                </button>
+                <a class="bg-gray-200 hover:bg-gray-300 text-black px-6 py-3 rounded-full shadow-md transition-colors" href="{% url 'home' %}">ยกเลิก</a>
+            </div>
+            <div class="text-center">
+                <a class="text-green-500 hover:underline" href="{% url 'password_reset' %}">ลืมรหัสผ่าน?</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Slide-in effect for messages
+        const messageBoxes = document.querySelectorAll('.message-box');
+        messageBoxes.forEach((box, index) => {
+            setTimeout(() => {
+                box.classList.remove('opacity-0');
+                box.classList.add('opacity-100', 'translate-y-0');
+            }, index * 300); // Delay for each message box
+        });
+    });
+</script>
+{% endblock %}
+
+<style>
+    /* Adding some additional styles for the message slide-in effect */
+    .message-box {
+        transform: translateY(-20px); /* Initial position for slide effect */
+        transition: transform 0.5s, opacity 0.5s;
+    }
+    .message-box.opacity-100 {
+        transform: translateY(0); /* Final position */
+    }
+</style>
